@@ -36,6 +36,7 @@ All tools are installed automatically via Conda. Databases (CheckV, geNomad, Pha
 
 ## Output
 
+```
 results/
 ├── 00_raw/                    Downloaded FASTQ
 ├── 01_read_qc/                NanoPlot stats and plots
@@ -44,6 +45,7 @@ results/
 ├── 04_assembly_qc/            QUAST, coverage, CheckV
 ├── 05_characterization/       geNomad, BLAST, BACPHLIP, tRNAs, AMR, Pharokka
 └── 06_report/                 nanophage_report.html
+```
 
 ## Cluster configuration
 
