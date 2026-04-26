@@ -5,29 +5,64 @@ Nextflow pipeline for Nanopore phage genome assembly and characterization.
 ## Pipeline overview
 
 ```mermaid
-graph LR
-    A[Google Drive] -->|gdown| B[Raw FASTQ]
-    B -->|NanoPlot| C[Read QC]
-    B -->|Chopper| D[Filtered reads]
-    D -->|Flye| E[Assembly]
-    E -->|QUAST + minimap2 + CheckV| F[Assembly QC]
-    E -->|geNomad| G[Viral ID & Taxonomy]
-    E -->|BLASTn remote| H[Closest relative]
-    E -->|BACPHLIP| I[Lifestyle]
-    E -->|tRNAscan-SE| J[tRNAs]
-    E -->|ABRicate| K[AMR screening]
-    E -->|Pharokka| L[Annotation & Map]
-    F --> M[HTML Report]
-    G --> M
-    H --> M
-    I --> M
-    J --> M
-    K --> M
-    L --> M
+graph TD
+    %% Define Styles
+    classDef main fill:#fff,stroke:#333,stroke-width:1px,rx:5,ry:5;
+    classDef process fill:#e8f4fd,stroke:#2980b9,stroke-width:1.5px,color:#333;
+    classDef data fill:#e8f8e8,stroke:#27ae60,stroke-width:1.5px,color:#333,rx:20,ry:20;
+    classDef final fill:#fef3e2,stroke:#e67e22,stroke-width:2px,color:#333,font-weight:bold;
+    classDef tool fill:#f9f9f9,stroke:#999,stroke-width:1px,stroke-dasharray: 5 5,color:#555;
 
-    style A fill:#e8f4fd,stroke:#2980b9
-    style E fill:#e8f8e8,stroke:#27ae60
-    style M fill:#fef3e2,stroke:#e67e22
+    %% Main Subgraphs
+    subgraph Input_Stage ["1. Input Data"]
+        direction LR
+        A[fa:fa-cloud-download Google Drive ID] -->|gdown| B(fa:fa-file-code Raw FASTQ)
+    end
+
+    subgraph QC_Stage ["2. Read QC & Filtering"]
+        direction LR
+        B -->|NanoPlot| C{fa:fa-bar-chart Read QC}
+        B -->|Chopper| D(fa:fa-filter Filtered Reads)
+    end
+
+    subgraph Assembly_Stage ["3. De Novo Assembly"]
+        direction LR
+        D -->|Flye| E(fa:fa-dna Assembly Contigs)
+    end
+
+    subgraph Assembly_QC_Stage ["4. Assembly QC"]
+        direction LR
+        E -->|QUAST + minimap2 + CheckV| F(fa:fa-check-circle Assembly Quality)
+    end
+
+    subgraph Analysis_Stage ["5. Phage Characterization"]
+        direction LR
+        E --> Analysis
+        
+        subgraph Analysis_Tools
+            direction TB
+            genomad[geNomad: Viral ID & Taxonomy]
+            blast[BLASTn: Closest Relative]
+            bacphlip[BACPHLIP: Lifestyle]
+            trna[tRNAscan-SE: tRNAs]
+            abricate[ABRicate: AMR Screening]
+            pharokka[Pharokka: Annotation]
+        end
+    end
+
+    subgraph Output_Stage ["6. Integrated Report"]
+        Analysis_Tools --> M((fa:fa-file-signature Final HTML Report))
+    end
+
+    %% Apply Classes
+    class A,M main;
+    class C,F,genomad,blast,bacphlip,trna,abricate,pharokka tool;
+    class B,D,E data;
+    class M final;
+    class Input_Stage,QC_Stage,Assembly_Stage,Assembly_QC_Stage,Analysis_Stage,Output_Stage process;
+
+    %% FontAwesome icons require a compatible font/rendering environment. 
+    %% If icons don't render, remove 'fa:fa-...' part from labels.
 ```
 
 ## Quick start
