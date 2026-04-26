@@ -4,9 +4,31 @@ Nextflow pipeline for Nanopore phage genome assembly and characterization.
 
 ## Pipeline overview
 
-Download (Google Drive) → Read QC (NanoPlot) → Filter (Chopper) → Assembly (Flye)
-→ Assembly QC (QUAST, minimap2, CheckV) → Characterization (geNomad, BLASTn,
-BACPHLIP, tRNAscan-SE, ABRicate, Pharokka) → HTML Report
+```mermaid
+graph LR
+    A[Google Drive] -->|gdown| B[Raw FASTQ]
+    B -->|NanoPlot| C[Read QC]
+    B -->|Chopper| D[Filtered reads]
+    D -->|Flye| E[Assembly]
+    E -->|QUAST + minimap2 + CheckV| F[Assembly QC]
+    E -->|geNomad| G[Viral ID & Taxonomy]
+    E -->|BLASTn remote| H[Closest relative]
+    E -->|BACPHLIP| I[Lifestyle]
+    E -->|tRNAscan-SE| J[tRNAs]
+    E -->|ABRicate| K[AMR screening]
+    E -->|Pharokka| L[Annotation & Map]
+    F --> M[HTML Report]
+    G --> M
+    H --> M
+    I --> M
+    J --> M
+    K --> M
+    L --> M
+
+    style A fill:#e8f4fd,stroke:#2980b9
+    style E fill:#e8f8e8,stroke:#27ae60
+    style M fill:#fef3e2,stroke:#e67e22
+```
 
 ## Quick start
 
