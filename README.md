@@ -5,38 +5,29 @@ Nextflow pipeline for Nanopore phage genome assembly and characterization.
 ## Pipeline overview
 
 ```mermaid
-graph TD
-    subgraph Input
-        A[Google Drive ID] --> B(Download Reads)
-    end
+graph LR
+    A[Google Drive] -->|gdown| B[Raw FASTQ]
+    B -->|NanoPlot| C[Read QC]
+    B -->|Chopper| D[Filtered reads]
+    D -->|Flye| E[Assembly]
+    E -->|QUAST + minimap2 + CheckV| F[Assembly QC]
+    E -->|geNomad| G[Viral ID & Taxonomy]
+    E -->|BLASTn remote| H[Closest relative]
+    E -->|BACPHLIP| I[Lifestyle]
+    E -->|tRNAscan-SE| J[tRNAs]
+    E -->|ABRicate| K[AMR screening]
+    E -->|Pharokka| L[Annotation & Map]
+    F --> M[HTML Report]
+    G --> M
+    H --> M
+    I --> M
+    J --> M
+    K --> M
+    L --> M
 
-    subgraph QC_Filtering["Quality Control"]
-        B --> C{NanoPlot QC}
-        C --> D[Chopper Filtering]
-    end
-
-    subgraph Assembly_Block["Genome Assembly"]
-        D --> E[Flye Assembly]
-        E --> F[minimap2 Coverage]
-        E --> G[QUAST Stats]
-        E --> H[CheckV Quality]
-    end
-
-    subgraph Analysis["Phage Characterization"]
-        H --> I[geNomad: Taxonomy]
-        H --> J[Pharokka: Annotation]
-        H --> K[BACPHLIP: Lifecycle]
-        H --> L[ABRicate: AMR]
-        H --> M[BLASTn: Remote Search]
-    end
-
-    subgraph Output
-        I & J & K & L & M --> N((Final HTML Report))
-    end
-
-    style N fill:#f96,stroke:#333,stroke-width:4px
-    style A fill:#4285F4,color:#fff
-    style E fill:#00C853,color:#fff
+    style A fill:#e8f4fd,stroke:#2980b9
+    style E fill:#e8f8e8,stroke:#27ae60
+    style M fill:#fef3e2,stroke:#e67e22
 ```
 
 ## Quick start
