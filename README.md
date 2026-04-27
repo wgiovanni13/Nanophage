@@ -75,9 +75,9 @@ Edit `nextflow.config` to match your HPC:
 
 ```nextflow
 process {
-    executor = 'slurm'    // or 'local', 'pbs', 'sge' depending on your HPC queue's names
-    queue    = 'm'        // or 'batch' depending on your HPC queue's names
-    qos      = 'medium'   // or 'm' depending on your HPC queue's names
+    executor = 'slurm'    // or 'local', 'pbs', 'sge' depending on your HPC workload manager name
+    queue    = 'm'        // or 'batch' depending on your HPC queue's name
+    qos      = 'medium'   // or 'm' depending on your HPC qos' name
 }
 ```
 
